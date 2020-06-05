@@ -1,12 +1,15 @@
 import numpy as np
 import cv2
 
-faceCascade = cv2.CascadeClassifier('/usr/local/lib/python3.7/site-packages/cv2/data/haarcascade_frontalface_default.xml')
-smileCascade = cv2.CascadeClassifier('/usr/local/lib/python3.7/site-packages/cv2/data/haarcascade_smile.xml')
- 
+faceCascade = cv2.CascadeClassifier(
+    '/usr/local/lib/python3.7/site-packages/cv2/data/haarcascade_frontalface_default.xml')
+smileCascade = cv2.CascadeClassifier(
+    '/usr/local/lib/python3.7/site-packages/cv2/data/haarcascade_smile.xml')
+
+
 cap = cv2.VideoCapture(0)
-cap.set(3,640) # set Width
-cap.set(4,480) # set Height
+cap.set(3, 640)  # set Width
+cap.set(4, 480)  # set Height
 
 while True:
     ret, img = cap.read()
@@ -15,29 +18,37 @@ while True:
     faces = faceCascade.detectMultiScale(
         gray,
         scaleFactor=1.3,
-        minNeighbors=5,      
+        minNeighbors=5,
         minSize=(30, 30)
     )
-
-    for (x,y,w,h) in faces:
-        cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+    font = cv2.FONT_HERSHEY_SIMPLEX 
+    for (x, y, w, h) in faces:
+        cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
         roi_gray = gray[y:y+h, x:x+w]
         roi_color = img[y:y+h, x:x+w]
-        
+
         smile = smileCascade.detectMultiScale(
             roi_gray,
-            scaleFactor= 1.5,
+            scaleFactor=1.5,
             minNeighbors=15,
             minSize=(25, 25),
-            )
-        
+        )
+        print(smile)
+
         for (xx, yy, ww, hh) in smile:
-            cv2.rectangle(roi_color, (xx, yy), (xx + ww, yy + hh), (0, 255, 0), 2)
-               
+            cv2.rectangle(roi_color, (xx, yy),
+                          (xx + ww, yy + hh), (0, 255, 0), 2)
+            cv2.putText(img,  
+                'Smilling',  
+                (50, 50),  
+                font, 1,  
+                (0, 255, 255),  
+                2,  
+                cv2.LINE_4)
         cv2.imshow('video', img)
 
     k = cv2.waitKey(30) & 0xff
-    if k == 27: # press 'ESC' to quit
+    if k == 27:  # press 'ESC' to quit
         break
 
 cap.release()
