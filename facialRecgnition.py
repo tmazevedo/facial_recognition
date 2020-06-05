@@ -33,7 +33,7 @@ while True:
             minNeighbors=15,
             minSize=(25, 25),
         )
-        print(smile)
+        # print(smile)
 
         for (xx, yy, ww, hh) in smile:
             cv2.rectangle(roi_color, (xx, yy),
