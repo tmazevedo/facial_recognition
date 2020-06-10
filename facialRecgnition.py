@@ -50,6 +50,7 @@ while True:
     k = cv2.waitKey(30) & 0xff
     if k == 27:  # press 'ESC' to quit
         break
+    
 
 cap.release()
 cv2.destroyAllWindows()
